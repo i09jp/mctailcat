@@ -14,7 +14,7 @@ public class CommonProxy {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
 
         MCtailcat.LOG.info(Config.greeting);
-        MCtailcat.LOG.info("I am MCtailcat at version " + "0.1");
+        MCtailcat.LOG.info("I am MCtailcat at version " + TAG.Version);
     }
 
     // load "Do your mod setup. Build whatever data structures you care about.
