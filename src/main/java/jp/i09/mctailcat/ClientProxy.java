@@ -1,10 +1,7 @@
 package jp.i09.mctailcat;
 
-public class ClientProxy extends CommonProxy {
-
-package jp.i09.mctailcat;
-
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+
 
 public class ClientProxy extends CommonProxy {
 
@@ -25,7 +22,8 @@ public class ClientProxy extends CommonProxy {
                 try {
                     int port = TailcatForwarder.start(testAddress);
 
-                    System.out.println("[MCtailcat] Tailcat ready: 127.0.0.1:" + port);
+                    System.out.println("[MCtailcat] Tailcat ready: " + "127.0.0.1:" + port);
+
                 } catch (Exception e) {
                     System.err.println("[MCtailcat] Tailcat failed");
                     e.printStackTrace();
@@ -36,4 +34,5 @@ public class ClientProxy extends CommonProxy {
         thread.setDaemon(true);
         thread.start();
     }
-}}
+
+}
