@@ -10,8 +10,7 @@ import net.minecraft.client.Minecraft;
 
 public final class TailcatBinary {
 
-    private static final String RESOURCE_PATH =
-        "/assets/mctailcat/windows/tailcat.exe";
+    private static final String RESOURCE_PATH = "/assets/mctailcat/windows/tailcat.exe";
 
     private TailcatBinary() {}
 
@@ -21,28 +20,18 @@ public final class TailcatBinary {
         File binDir = new File(gameDir, "mctailcat/bin");
 
         if (!binDir.exists() && !binDir.mkdirs()) {
-            throw new IOException(
-                "Failed to create directory: " + binDir
-            );
+            throw new IOException("Failed to create directory: " + binDir);
         }
 
         File target = new File(binDir, "tailcat.exe");
 
-        try (InputStream in =
-            TailcatBinary.class.getResourceAsStream(RESOURCE_PATH)) {
+        try (InputStream in = TailcatBinary.class.getResourceAsStream(RESOURCE_PATH)) {
 
             if (in == null) {
-                throw new IOException(
-                    "tailcat.exe not found in resources: "
-                        + RESOURCE_PATH
-                );
+                throw new IOException("tailcat.exe not found in resources: " + RESOURCE_PATH);
             }
 
-            Files.copy(
-                in,
-                target.toPath(),
-                StandardCopyOption.REPLACE_EXISTING
-            );
+            Files.copy(in, target.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
 
         return target;

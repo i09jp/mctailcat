@@ -2,45 +2,38 @@ package jp.i09.mctailcat;
 
 public class ClientProxy extends CommonProxy {
 
-@Override
-public void init(FMLInitializationEvent event) {
-    super.init(event);
+package jp.i09.mctailcat;
 
-    final String testAddress =
-        System.getenv("MCTAILCAT_TEST_ADDR");
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 
-    if (testAddress == null || testAddress.isEmpty()) {
-        return;
-    }
+public class ClientProxy extends CommonProxy {
 
-    Thread thread = new Thread(
-        new Runnable() {
+    @Override
+    public void init(FMLInitializationEvent event) {
+        super.init(event);
+
+        final String testAddress = System.getenv("MCTAILCAT_TEST_ADDR");
+
+        if (testAddress == null || testAddress.isEmpty()) {
+            return;
+        }
+
+        Thread thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 try {
-                    int port =
-                        TailcatForwarder.start(testAddress);
+                    int port = TailcatForwarder.start(testAddress);
 
-                    System.out.println(
-                        "[MCtailcat] Tailcat ready: "
-                            + "127.0.0.1:"
-                            + port
-                    );
-
+                    System.out.println("[MCtailcat] Tailcat ready: 127.0.0.1:" + port);
                 } catch (Exception e) {
-                    System.err.println(
-                        "[MCtailcat] Tailcat failed"
-                    );
+                    System.err.println("[MCtailcat] Tailcat failed");
                     e.printStackTrace();
                 }
             }
-        },
-        "MCtailcat-test"
-    );
+        }, "MCtailcat-test");
 
-    thread.setDaemon(true);
-    thread.start();
-}
-
-}
+        thread.setDaemon(true);
+        thread.start();
+    }
+}}

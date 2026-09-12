@@ -16,15 +16,12 @@ public final class TailcatForwarder {
 
     private TailcatForwarder() {}
 
-    public static synchronized int start(String address)
-        throws IOException {
+    public static synchronized int start(String address) throws IOException {
 
         stop();
 
         if (address == null || !address.startsWith("tc")) {
-            throw new IllegalArgumentException(
-                "Not a tailcat address"
-            );
+            throw new IllegalArgumentException("Not a tailcat address");
         }
 
         File executable = TailcatBinary.extract();
@@ -35,8 +32,7 @@ public final class TailcatForwarder {
             executable.getAbsolutePath(),
             "forward",
             address,
-            localPort + ":25565"
-        );
+            localPort + ":25565");
 
         builder.redirectErrorStream(true);
 
@@ -67,37 +63,24 @@ public final class TailcatForwarder {
     }
 
     private static int findFreePort() throws IOException {
-        try (ServerSocket socket =
-            new ServerSocket(0, 0, null)) {
+        try (ServerSocket socket = new ServerSocket(0, 0, null)) {
 
             return socket.getLocalPort();
         }
     }
 
-    private static void waitForListener(
-        Process tailcat,
-        int port
-    ) throws IOException {
+    private static void waitForListener(Process tailcat, int port) throws IOException {
 
-        long deadline =
-            System.currentTimeMillis() + 10000L;
+        long deadline = System.currentTimeMillis() + 10000L;
 
         while (System.currentTimeMillis() < deadline) {
 
             if (!isAlive(tailcat)) {
-                throw new IOException(
-                    "tailcat exited before opening local port"
-                );
+                throw new IOException("tailcat exited before opening local port");
             }
 
             try (Socket socket = new Socket()) {
-                socket.connect(
-                    new InetSocketAddress(
-                        "127.0.0.1",
-                        port
-                    ),
-                    100
-                );
+                socket.connect(new InetSocketAddress("127.0.0.1", port), 100);
 
                 return;
 
@@ -108,20 +91,16 @@ public final class TailcatForwarder {
             try {
                 Thread.sleep(50L);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                Thread.currentThread()
+                    .interrupt();
 
-                throw new IOException(
-                    "Interrupted while waiting for tailcat",
-                    e
-                );
+                throw new IOException("Interrupted while waiting for tailcat", e);
             }
         }
 
         stop();
 
-        throw new IOException(
-            "Timed out waiting for tailcat local listener"
-        );
+        throw new IOException("Timed out waiting for tailcat local listener");
     }
 
     private static boolean isAlive(Process process) {
@@ -133,33 +112,22 @@ public final class TailcatForwarder {
         }
     }
 
-    private static void startOutputReader(
-        final Process process
-    ) {
-        Thread thread = new Thread(
-            new Runnable() {
+    private static void startOutputReader(final Process process) {
+        Thread thread = new Thread(new Runnable() {
 
-                @Override
-                public void run() {
-                    try (BufferedReader reader =
-                        new BufferedReader(
-                            new InputStreamReader(
-                                process.getInputStream(),
-                                StandardCharsets.UTF_8
-                            )
-                        )) {
+            @Override
+            public void run() {
+                try (BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
 
-                        while (reader.readLine() != null) {
-                            // 今は読み捨てる。
-                            // 本番ではtc addressをログに出さない。
-                        }
-
-                    } catch (IOException ignored) {
+                    while (reader.readLine() != null) {
+                        // 今は読み捨てる。
+                        // 本番ではtc addressをログに出さない。
                     }
-                }
-            },
-            "MCtailcat-output"
-        );
+
+                } catch (IOException ignored) {}
+            }
+        }, "MCtailcat-output");
 
         thread.setDaemon(true);
         thread.start();
