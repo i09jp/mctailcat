@@ -10,7 +10,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
-@Mod(modid = MCtailcat.MODID, version = Tags.VERSION, name = "MCtailcat", acceptedMinecraftVersions = "[1.7.10]")
+@Mod(modid = MCtailcat.MODID, version = "0.1", name = "MCtailcat", acceptedMinecraftVersions = "[1.7.10]")
 public class MCtailcat {
 
     public static final String MODID = "mctailcat";
